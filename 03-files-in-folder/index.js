@@ -3,12 +3,17 @@ const path = require('path');
 const secretPath = path.join(__dirname, 'secret-folder');
 
 fs.readdir(secretPath, (err, files) => {
-  err ? console.log(err) : null;
+  if (err) {
+    throw new Error('Cannot read directory');
+  }
+
   files.forEach((file) => {
     const currentPath = path.join(secretPath, file);
 
     fs.stat(currentPath, (err, stats) => {
-      err ? console.log(err) : null;
+      if (err) {
+        throw new Error('Cannot read file');
+      }
 
       if (!stats.isDirectory()) {
         const fileBaseName = path.parse(currentPath, file).name;
